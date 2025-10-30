@@ -1,5 +1,8 @@
 package com.bolsadeideas.springboot.reactor.app;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -21,8 +24,23 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Flux<String> nombres = Flux.just("Andres Guzman", "Pedro Fulano", "Diego Melano", "Juan Perez", "Kevin Eslava",
-				"Bruce Wayne", "Bruce Lee");
+		List<String> usuariosList = new ArrayList<>() {
+			{
+				add("Andres Guzman");
+				add("Pedro Fulano");
+				add("Diego Melano");
+				add("Juan Perez");
+				add("Kevin Eslava");
+				add("Bruce Wayne");
+				add("Bruce Lee");
+			}
+		};
+
+		Flux<String> nombres = Flux.fromIterable(usuariosList);
+
+		// Flux<String> nombres = Flux.just("Andres Guzman", "Pedro Fulano", "Diego
+		// Melano", "Juan Perez", "Kevin Eslava",
+		// "Bruce Wayne", "Bruce Lee");
 
 		Flux<Usuario> usuarios = nombres
 				.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
