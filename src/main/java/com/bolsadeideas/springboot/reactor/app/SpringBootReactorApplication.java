@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.bolsadeideas.springboot.reactor.app.models.Usuario;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 public class SpringBootReactorApplication implements CommandLineRunner {
@@ -24,6 +25,38 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		ejemploFlatMap();
+	}
+
+	public void ejemploFlatMap() throws Exception {
+		List<String> usuariosList = new ArrayList<>() {
+			{
+				add("Andres Guzman");
+				add("Pedro Fulano");
+				add("Diego Melano");
+				add("Juan Perez");
+				add("Kevin Eslava");
+				add("Bruce Wayne");
+				add("Bruce Lee");
+			}
+		};
+
+		Flux.fromIterable(usuariosList)
+				.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
+				.flatMap(usuario -> {
+					if (usuario.getNombre().equalsIgnoreCase("bruce")) {
+						return Mono.just(usuario);
+					}
+					return Mono.empty();
+				})
+				.map(usuario -> {
+					usuario.setNombre(usuario.getNombre().toLowerCase());
+					return usuario;
+				})
+				.subscribe(usuario -> log.info(usuario.toString()));
+	}
+
+	public void ejemploIterable() throws Exception {
 		List<String> usuariosList = new ArrayList<>() {
 			{
 				add("Andres Guzman");
@@ -65,5 +98,4 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 					}
 				});
 	}
-
 }
