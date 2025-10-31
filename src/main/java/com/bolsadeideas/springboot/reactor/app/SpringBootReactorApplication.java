@@ -7,6 +7,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -31,7 +33,48 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		ejemploIntervalDesdeCreate();
+		ejemploContraPresion();
+	}
+
+	public void ejemploContraPresion() throws Exception {
+		Flux.range(0, 10)
+				.log()
+				.limitRate(2)
+				.subscribe(
+				// new Subscriber<Integer>() {
+
+				// private Subscription s;
+				// private Integer limite = 2;
+				// private Integer consumido = 0;
+
+				// @Override
+				// public void onComplete() {
+				// // TODO Auto-generated method stub
+				// }
+
+				// @Override
+				// public void onError(Throwable arg0) {
+				// log.error(arg0.getMessage());
+				// }
+
+				// @Override
+				// public void onNext(Integer arg0) {
+				// log.info(arg0.toString());
+				// consumido++;
+				// if (consumido == limite) {
+				// consumido = 0;
+				// s.request(limite);
+				// }
+				// }
+
+				// @Override
+				// public void onSubscribe(Subscription arg0) {
+				// this.s = arg0;
+				// this.s.request(limite);
+				// }
+
+				// }
+				);
 	}
 
 	public void ejemploIntervalDesdeCreate() throws Exception {
